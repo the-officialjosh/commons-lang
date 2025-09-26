@@ -198,6 +198,7 @@
               <exclude>src/site/resources/download_lang.cgi</exclude>
               <exclude>src/site/resources/release-notes/RELEASE-NOTES-*.txt</exclude>
               <exclude>src/test/resources/lang-708-input.txt</exclude>
+              <exclude>**/.github/**</exclude>
               <exclude>**/*.svg</exclude>
               <exclude>**/*.xcf</exclude>
             </excludes>
@@ -206,6 +207,17 @@
       </plugins>
     </pluginManagement>
     <plugins>
+     <plugin>
+  <groupId>org.apache.rat</groupId>
+  <artifactId>apache-rat-plugin</artifactId>
+  <version>0.16.1</version>
+  <configuration>
+    <excludes>
+      <exclude>**/.github/**</exclude>
+      <exclude>**/target/**</exclude>
+    </excludes>
+  </configuration>
+</plugin>
       <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
           <configuration>
