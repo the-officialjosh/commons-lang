@@ -60,7 +60,7 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: mvn -B verify -Dmaven.test.failure.ignore=true \
-          org.sonarsource.scanner.maven:sonar-maven-plugin:5.2.0.4988:sonar \
+          org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
           -DskipITs \
           -Dsonar.projectKey=the-officialjosh_commons-lang \
           -Dsonar.organization=the-officialjosh \
