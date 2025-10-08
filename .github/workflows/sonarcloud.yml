@@ -59,10 +59,10 @@ jobs:
       - name: Build and analyze with SonarCloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: |
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar \
-            -DskipITs \
-            -Dmaven.test.failure.ignore=true \
-            -Dsonar.projectKey=the-officialjosh_commons-lang \
-            -Dsonar.organization=the-officialjosh \
-            -Dsonar.host.url=https://sonarcloud.io
+        run: >
+          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:5.2.0.4988:sonar
+          -DskipITs
+          -Dmaven.test.failure.ignore=true
+          -Dsonar.projectKey=the-officialjosh_commons-lang
+          -Dsonar.organization=the-officialjosh
+          -Dsonar.host.url=https://sonarcloud.io
