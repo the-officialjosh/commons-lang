@@ -560,4 +560,22 @@ class RandomUtilsTest extends AbstractLangTest {
     void testZeroLengthNextBytes(final RandomUtils ru) {
         assertArrayEquals(new byte[0], ru.randomBytes(0));
     }
+
+    /**
+     * Tests the secureRandom() method to ensure it returns a non-null SecureRandom instance.
+     */
+    @Test
+    void testSecureRandomNotNull() {
+        assertNotNull(RandomUtils.secureRandom(), "SecureRandom should not be null");
+    }
+
+    /**
+     * Tests secureRandom() generates random bytes.
+     */
+    @Test
+    void testSecureRandomGeneratesBytes() {
+        byte[] bytes = new byte[16];
+        RandomUtils.secureRandom().nextBytes(bytes);
+        assertEquals(16, bytes.length);
+    }
 }
