@@ -252,7 +252,11 @@ public class RandomUtils {
     }
 
     static SecureRandom secureRandom() {
-        return SECURE_RANDOM_STRONG.get();
+        try {
+            return SECURE_RANDOM_STRONG.get();
+        } finally {
+            SECURE_RANDOM_STRONG.remove();
+        }
     }
 
     /**
