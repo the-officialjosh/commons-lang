@@ -223,20 +223,25 @@
             <artifactId>jacoco-maven-plugin</artifactId>
             <version>0.8.11</version>
             <executions>
-                <!-- Attach JaCoCo agent to collect coverage during test -->
+                <!-- Attach JaCoCo to tests -->
                 <execution>
                     <id>prepare-agent</id>
                     <goals>
                         <goal>prepare-agent</goal>
                     </goals>
                 </execution>
-                <!-- Generate coverage report after tests -->
+                <!-- Generate XML report -->
                 <execution>
                     <id>report</id>
                     <phase>verify</phase>
                     <goals>
                         <goal>report</goal>
                     </goals>
+                    <configuration>
+                        <reports>
+                            <report>xml</report>
+                        </reports>
+                    </configuration>
                 </execution>
             </executions>
         </plugin>
