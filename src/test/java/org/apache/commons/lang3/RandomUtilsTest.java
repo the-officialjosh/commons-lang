@@ -574,7 +574,7 @@ class RandomUtilsTest extends AbstractLangTest {
      */
     @Test
     void testSecureRandomGeneratesBytes() {
-        byte[] bytes = new byte[16];
+        final byte[] bytes = new byte[16];
         RandomUtils.secureRandom().nextBytes(bytes);
         assertEquals(16, bytes.length);
     }
