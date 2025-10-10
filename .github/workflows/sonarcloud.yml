@@ -25,44 +25,24 @@ on:
     types: [opened, synchronize, reopened]
 
 jobs:
-  build:
-    name: Build and analyze
-    runs-on: ubuntu-latest
+  build-and-analyze:
+    runs-on: [ ubuntu-latest ]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Needed for better analysis (full history)
-
+          fetch-depth: 0
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: 17
-
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v4
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-
-      - name: Cache Maven repository
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
-
+      - name: Build  with Maven
+        run: mvn clean install
       - name: Build and analyze with SonarCloud
+        uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: >
-          mvn -B verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
-          -DskipITs
-          -Dsonar.projectKey=the-officialjosh_commons-lang
-          -Dsonar.organization=the-officialjosh
-          -Dsonar.host.url=https://sonarcloud.io
-          -Dsonar.coverage.jacoco.xmlReportPaths=commons-lang/target/site/jacoco/jacoco.xml
+          SONAR_HOST_URL: 'https://sonarcloud.io/'
+
