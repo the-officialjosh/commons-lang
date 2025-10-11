@@ -194,7 +194,7 @@ public class ArrayUtils {
      *
      * @since 3.19.0
      */
-    public static int SOFT_MAX_ARRAY_LENGTH = Integer.MAX_VALUE - 8;
+    public static final int SOFT_MAX_ARRAY_LENGTH = Integer.MAX_VALUE - 8;
 
     /**
      * Copies the given array and adds the given element at the end of the new array.
