@@ -5315,48 +5315,54 @@ public class ArrayUtils {
      */
     // package protected for access by unit tests
     static Object removeAll(final Object array, final int... indices) {
-        if (array == null) {
-            return null;
-        }
+        if (array == null) return null;
         final int length = getLength(array);
-        int diff = 0; // number of distinct indexes, i.e. number of entries that will be removed
         final int[] clonedIndices = ArraySorter.sort(clone(indices));
-        // identify length of result array
-        if (isNotEmpty(clonedIndices)) {
-            int i = clonedIndices.length;
-            int prevIndex = length;
-            while (--i >= 0) {
-                final int index = clonedIndices[i];
-                if (index < 0 || index >= length) {
-                    throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + length);
-                }
-                if (index >= prevIndex) {
-                    continue;
-                }
-                diff++;
-                prevIndex = index;
-            }
-        }
-        // create result array
+        final int diff = isNotEmpty(clonedIndices) ? validateIndices(clonedIndices, length) : 0;
         final Object result = Array.newInstance(array.getClass().getComponentType(), length - diff);
-        if (diff < length && clonedIndices != null) {
-            int end = length; // index just after last copy
-            int dest = length - diff; // number of entries so far not copied
-            for (int i = clonedIndices.length - 1; i >= 0; i--) {
-                final int index = clonedIndices[i];
-                if (end - index > 1) { // same as (cp > 0)
-                    final int cp = end - index - 1;
-                    dest -= cp;
-                    System.arraycopy(array, index + 1, result, dest, cp);
-                    // After this copy, we still have room for dest items.
-                }
-                end = index;
-            }
-            if (end > 0) {
-                System.arraycopy(array, 0, result, 0, end);
-            }
-        }
+        if (diff < length) copyRemainingElements(array, clonedIndices, result, length, diff);
         return result;
+    }
+
+    /**
+     * Validates indices and returns the count of distinct indices to remove.
+     */
+    private static int validateIndices(int[] indices, int length) {
+        int diff = 0;
+        int i = indices.length;
+        int prevIndex = length;
+        while (--i >= 0) {
+            final int index = indices[i];
+            if (index < 0 || index >= length) {
+                throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + length);
+            }
+            if (index >= prevIndex) {
+                continue;
+            }
+            diff++;
+            prevIndex = index;
+        }
+        return diff;
+    }
+
+    /**
+     * Copies the remaining elements from the source array to the result, skipping removed indices.
+     */
+    private static void copyRemainingElements(Object array, int[] clonedIndices, Object result, int length, int diff) {
+        int end = length;
+        int dest = length - diff;
+        for (int i = clonedIndices.length - 1; i >= 0; i--) {
+            final int index = clonedIndices[i];
+            if (end - index > 1) {
+                final int cp = end - index - 1;
+                dest -= cp;
+                System.arraycopy(array, index + 1, result, dest, cp);
+            }
+            end = index;
+        }
+        if (end > 0) {
+            System.arraycopy(array, 0, result, 0, end);
+        }
     }
 
     /**
