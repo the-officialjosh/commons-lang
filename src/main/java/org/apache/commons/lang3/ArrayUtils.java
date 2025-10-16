@@ -5364,7 +5364,6 @@ public class ArrayUtils {
     private static void copyElementsExcludingIndices(
             final Object array, final Object result, final int[] indices,
             final int length, final int diff) {
-
         int end = length;
         int dest = length - diff;
 
