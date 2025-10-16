@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotSame;
 import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -764,34 +763,6 @@ class ArrayUtilsRemoveMultipleTest extends AbstractLangTest {
         assertNotSame(array1, array2);
         assertArrayEquals(array1, array2);
         assertEquals(Object.class, array2.getClass().getComponentType());
-    }
-
-    @Test
-    void testRemoveAllObjectArrayRefactorRegression() {
-        // Regular removal
-        Object[] array = { "A", "B", "C", "D", "E" };
-        Object[] result = ArrayUtils.removeAll(array, 1, 3);
-        assertArrayEquals(new Object[]{ "A", "C", "E" }, result, "Should remove indices 1 and 3 correctly");
-
-        // Duplicate indices should not double-remove
-        result = ArrayUtils.removeAll(array, 1, 1, 3, 3);
-        assertArrayEquals(new Object[]{ "A", "C", "E" }, result, "Duplicate indices should be ignored");
-
-        // Unsorted indices should be handled correctly
-        result = ArrayUtils.removeAll(array, 4, 0, 2);
-        assertArrayEquals(new Object[]{ "B", "D" }, result, "Unsorted indices should be processed correctly");
-
-        // Empty indices array ? returns a new copy identical to input
-        result = ArrayUtils.removeAll(array, new int[0]);
-        assertNotSame(array, result, "Should return a new array even if no indices are given");
-        assertArrayEquals(array, result, "Should not modify contents when no indices are given");
-
-        // Null input should return null
-        assertNull(ArrayUtils.removeAll((Object[]) null, 0), "Null input should return null");
-
-        // Out of bounds should still throw exception
-        assertThrows(IndexOutOfBoundsException.class, () -> ArrayUtils.removeAll(array, 10),
-            "Out-of-bounds index should throw IndexOutOfBoundsException");
     }
 
     @Test

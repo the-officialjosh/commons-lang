@@ -5315,61 +5315,73 @@ public class ArrayUtils {
      */
     // package protected for access by unit tests
     static Object removeAll(final Object array, final int... indices) {
-        if (array == null) return null;
+        if (array == null) {
+            return null;
+        }
+
         final int length = getLength(array);
-        final int[] clonedIndices = ArraySorter.sort(clone(indices));
-        final int diff = isNotEmpty(clonedIndices) ? validateIndices(clonedIndices, length) : 0;
+        final int[] sortedIndices = getValidSortedIndices(indices, length);
+
+        final int diff = countDistinctIndices(sortedIndices, length);
         final Object result = Array.newInstance(array.getClass().getComponentType(), length - diff);
-        if (diff < length) copyRemainingElements(array, clonedIndices, result, length, diff);
+
+        if (diff == 0) {
+            System.arraycopy(array, 0, result, 0, length);
+            return result;
+        }
+
+        copyElementsExcludingIndices(array, result, sortedIndices, length, diff);
         return result;
     }
 
-    /**
-     * Validates indices and returns the count of distinct indices to remove.
-     */
-    private static int validateIndices(int[] indices, int length) {
-        int diff = 0;
-        int i = indices.length;
-        int prevIndex = length;
-        while (--i >= 0) {
-            final int index = indices[i];
+    private static int[] getValidSortedIndices(final int[] indices, final int length) {
+        if (isEmpty(indices)) {
+            return new int[0];
+        }
+
+        final int[] sorted = ArraySorter.sort(clone(indices));
+        for (int index : sorted) {
             if (index < 0 || index >= length) {
                 throw new IndexOutOfBoundsException("Index: " + index + ", Length: " + length);
             }
-            if (index >= prevIndex) {
-                continue;
-            }
-            diff++;
-            prevIndex = index;
         }
-        return diff;
+        return sorted;
     }
 
-    /**
-     * Copies the remaining elements from the source array to the result, skipping removed indices.
-     */
-    private static void copyRemainingElements(Object array, int[] clonedIndices, Object result, int length, int diff) {
-        // Prevent NullPointerException for null arrays or indices
-        if (array == null || clonedIndices == null || result == null) {
-            return;
+    private static int countDistinctIndices(final int[] indices, final int length) {
+        int count = 0;
+        int prevIndex = length;
+        for (int i = indices.length - 1; i >= 0; i--) {
+            final int index = indices[i];
+            if (index < prevIndex) {
+                count++;
+                prevIndex = index;
+            }
         }
+        return count;
+    }
+
+    private static void copyElementsExcludingIndices(
+            final Object array, final Object result, final int[] indices,
+            final int length, final int diff) {
 
         int end = length;
         int dest = length - diff;
-        for (int i = clonedIndices.length - 1; i >= 0; i--) {
-            final int index = clonedIndices[i];
-            if (end - index > 1) {
-                final int cp = end - index - 1;
-                dest -= cp;
-                System.arraycopy(array, index + 1, result, dest, cp);
+
+        for (int i = indices.length - 1; i >= 0; i--) {
+            final int index = indices[i];
+            final int copyCount = end - index - 1;
+            if (copyCount > 0) {
+                dest -= copyCount;
+                System.arraycopy(array, index + 1, result, dest, copyCount);
             }
             end = index;
         }
+
         if (end > 0) {
             System.arraycopy(array, 0, result, 0, end);
         }
     }
-
     /**
      * Removes the elements at the specified positions from the specified array.
      * All remaining elements are shifted to the left.
