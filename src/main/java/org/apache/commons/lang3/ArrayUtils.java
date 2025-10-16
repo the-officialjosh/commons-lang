@@ -5349,6 +5349,11 @@ public class ArrayUtils {
      * Copies the remaining elements from the source array to the result, skipping removed indices.
      */
     private static void copyRemainingElements(Object array, int[] clonedIndices, Object result, int length, int diff) {
+        // Prevent NullPointerException for null arrays or indices
+        if (array == null || clonedIndices == null || result == null) {
+            return;
+        }
+
         int end = length;
         int dest = length - diff;
         for (int i = clonedIndices.length - 1; i >= 0; i--) {
