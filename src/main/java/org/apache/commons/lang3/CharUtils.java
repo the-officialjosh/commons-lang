@@ -545,7 +545,7 @@ public class CharUtils {
      * @deprecated TODO Make private in 4.0.
      */
     @Deprecated
-    public CharUtils() {
+    private CharUtils() {
         // empty
     }
 }
