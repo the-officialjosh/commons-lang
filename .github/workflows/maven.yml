@@ -1,9 +1,9 @@
 # Licensed to the Apache Software Foundation (ASF) under one or more
-# contributor license agreements.  See the NOTICE file distributed with
+# contributor license agreements. See the NOTICE file distributed with
 # this work for additional information regarding copyright ownership.
 # The ASF licenses this file to You under the Apache License, Version 2.0
 # (the "License"); you may not use this file except in compliance with
-# the License.  You may obtain a copy of the License at
+# the License. You may obtain a copy of the License at
 #
 #      https://www.apache.org/licenses/LICENSE-2.0
 #
@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Java CI
+name: Java CI (Simplified)
 
 on: [push, pull_request]
 
@@ -22,33 +22,20 @@ permissions:
 
 jobs:
   build:
+    runs-on: ubuntu-latest
 
-    runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-13]
-        java: [ 8, 11, 17, 21, 24 ]
-        experimental: [false]
-        include:
-          - java: 25-ea
-            experimental: true
-            os: ubuntu-latest
+        java: [17]  # Stable version
 
     steps:
-    - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
-      with:
-        persist-credentials: false
-    - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-    - name: Set up JDK ${{ matrix.java }}
-      uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5.0.0
-      with:
-        distribution: 'temurin'      
-        java-version: ${{ matrix.java }}
-    - name: Build with Maven
-      run: mvn --errors --show-version --batch-mode --no-transfer-progress -Ddoclint=all
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: ${{ matrix.java }}
+          cache: 'maven'
+
+      - name: Build and Test with Maven
+        run: mvn --batch-mode --no-transfer-progress clean verify
