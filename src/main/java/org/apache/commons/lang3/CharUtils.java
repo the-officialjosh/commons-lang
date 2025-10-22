@@ -545,8 +545,7 @@ public class CharUtils {
      * @deprecated TODO Make private in 4.0.
      */
     @Deprecated
-    @SuppressWarnings("java:S1118") // SONAR: utility class with public ctor kept for binary compatibility; hide in next major
     private CharUtils() {
-        // empty
+        throw new AssertionError("No instances");
     }
 }

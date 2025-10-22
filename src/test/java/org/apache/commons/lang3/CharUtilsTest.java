@@ -47,15 +47,27 @@ class CharUtilsTest extends AbstractLangTest {
         assertTrue(CharUtils.compare('c', 'a') > 0);
     }
 
+
     @Test
-    void testConstructor() {
-        assertNotNull(new CharUtils());
-        final Constructor<?>[] cons = CharUtils.class.getDeclaredConstructors();
-        assertEquals(1, cons.length);
-        assertTrue(Modifier.isPublic(cons[0].getModifiers()));
+    void testConstructor() throws Exception {
+        // Get the no-arg constructor
+        final Constructor<CharUtils> ctor = CharUtils.class.getDeclaredConstructor();
+
+        // It should be private now
+        assertTrue(Modifier.isPrivate(ctor.getModifiers()), "Constructor should be private");
+
+        // If someone reflects it open, it should still not allow instantiation
+        ctor.setAccessible(true);
+        InvocationTargetException ite = assertThrows(InvocationTargetException.class, ctor::newInstance);
+        assertTrue(ite.getCause() instanceof AssertionError
+                || ite.getCause() instanceof UnsupportedOperationException,
+                "Private ctor should throw to prevent instantiation");
+
+        // Class itself is still public and (if you didn't change it) not final
         assertTrue(Modifier.isPublic(CharUtils.class.getModifiers()));
         assertFalse(Modifier.isFinal(CharUtils.class.getModifiers()));
     }
+
 
     @Test
     void testIsAscii_char() {
