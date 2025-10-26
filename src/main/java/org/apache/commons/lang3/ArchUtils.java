@@ -142,7 +142,7 @@ public class ArchUtils {
      * @deprecated TODO Make private in 4.0.
      */
     @Deprecated
-    public ArchUtils() {
+    private ArchUtils() {
         // empty
     }
 
