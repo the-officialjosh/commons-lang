@@ -347,12 +347,10 @@ public class AnnotationUtils {
      * {@link AnnotationUtils} instances should NOT be constructed in
      * standard programming. Instead, the class should be used statically.
      *
-     * <p>This constructor is public to permit tools that require a JavaBean
-     * instance to operate.</p>
-     * @deprecated TODO Make private in 4.0.
+     * <p>Earlier this constructor was public to permit tools that require a JavaBean
+     * instance to operate. To prevent it from being instantiated, now defining it as a private constructor.</p>
      */
-    @Deprecated
-    public AnnotationUtils() {
-        // empty
+    private AnnotationUtils() {
+        throw new IllegalStateException("Utility class");
     }
 }
