@@ -473,6 +473,7 @@ public class Functions {
      * @return The object, which has been created by the supplier
      * @since 3.10
      */
+    @SuppressWarnings("java:S1181")
     public static <O, T extends Throwable> O get(final FailableSupplier<O, T> supplier) {
         try {
             return supplier.get();
@@ -488,6 +489,7 @@ public class Functions {
      * @param <T> The type of checked exception, which the supplier can throw.
      * @return The boolean, which has been created by the supplier
      */
+    @SuppressWarnings("java:S1181")
     private static <T extends Throwable> boolean getAsBoolean(final FailableBooleanSupplier<T> supplier) {
         try {
             return supplier.getAsBoolean();
@@ -535,6 +537,7 @@ public class Functions {
      * @param runnable The runnable to run
      * @param <T> the type of checked exception the runnable may throw
      */
+    @SuppressWarnings("java:S1181")
     public static <T extends Throwable> void run(final FailableRunnable<T> runnable) {
         try {
             runnable.run();
