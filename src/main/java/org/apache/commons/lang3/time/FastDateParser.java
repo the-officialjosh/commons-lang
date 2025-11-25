@@ -963,7 +963,7 @@ public class FastDateParser implements DateParser, Serializable {
      */
     @Override
     public TimeZone getTimeZone() {
-        return timeZone;
+        return (TimeZone) timeZone.clone();
     }
 
     /**
