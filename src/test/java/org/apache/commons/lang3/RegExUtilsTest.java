@@ -31,6 +31,7 @@ import org.junit.jupiter.api.Test;
  */
 class RegExUtilsTest extends AbstractLangTest {
 
+    @SuppressWarnings("java:S5852") // Safe: Possessive quantifiers (++) used to prevent backtracking
     private static final Pattern WHITESPACE_AND_LETTERS = Pattern.compile("( ++)([a-z]++)");
 
     @Test
