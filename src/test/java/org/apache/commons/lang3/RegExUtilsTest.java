@@ -31,6 +31,8 @@ import org.junit.jupiter.api.Test;
  */
 class RegExUtilsTest extends AbstractLangTest {
 
+    private static final Pattern WHITESPACE_AND_LETTERS = Pattern.compile("( ++)([a-z]++)");
+
     @Test
     void testDotAll() {
         assertTrue(RegExUtils.dotAll("<A>.*</A>").matcher("<A>\nxy\n</A>").matches());
@@ -206,7 +208,7 @@ class RegExUtilsTest extends AbstractLangTest {
         assertEquals("ABC___123", RegExUtils.replaceAll((CharSequence) "ABCabc123", Pattern.compile("[a-z]"), "_"));
         assertEquals("ABC_123", RegExUtils.replaceAll((CharSequence) "ABCabc123", Pattern.compile("[^A-Z0-9]+"), "_"));
         assertEquals("ABC123", RegExUtils.replaceAll((CharSequence) "ABCabc123", Pattern.compile("[^A-Z0-9]+"), ""));
-        assertEquals("Lorem_ipsum_dolor_sit", RegExUtils.replaceAll((CharSequence) "Lorem ipsum  dolor   sit", Pattern.compile("( +)([a-z]+)"), "_$2"));
+        assertEquals("Lorem_ipsum_dolor_sit", RegExUtils.replaceAll((CharSequence) "Lorem ipsum  dolor   sit", WHITESPACE_AND_LETTERS, "_$2"));
     }
 
     @Test
@@ -227,7 +229,7 @@ class RegExUtilsTest extends AbstractLangTest {
         assertEquals("ABC___123", RegExUtils.replaceAll("ABCabc123", "[a-z]", "_"));
         assertEquals("ABC_123", RegExUtils.replaceAll("ABCabc123", "[^A-Z0-9]+", "_"));
         assertEquals("ABC123", RegExUtils.replaceAll("ABCabc123", "[^A-Z0-9]+", ""));
-        assertEquals("Lorem_ipsum_dolor_sit", RegExUtils.replaceAll("Lorem ipsum  dolor   sit", "( +)([a-z]+)", "_$2"));
+        assertEquals("Lorem_ipsum_dolor_sit", RegExUtils.replaceAll("Lorem ipsum  dolor   sit", "( ++)([a-z]++)", "_$2"));
 
         assertThrows(PatternSyntaxException.class, () -> RegExUtils.replaceAll("any", "{badRegexSyntax}", ""),
                 "RegExUtils.replaceAll expecting PatternSyntaxException");
@@ -255,7 +257,7 @@ class RegExUtilsTest extends AbstractLangTest {
         assertEquals("ABC___123", RegExUtils.replaceAll("ABCabc123", Pattern.compile("[a-z]"), "_"));
         assertEquals("ABC_123", RegExUtils.replaceAll("ABCabc123", Pattern.compile("[^A-Z0-9]+"), "_"));
         assertEquals("ABC123", RegExUtils.replaceAll("ABCabc123", Pattern.compile("[^A-Z0-9]+"), ""));
-        assertEquals("Lorem_ipsum_dolor_sit", RegExUtils.replaceAll("Lorem ipsum  dolor   sit", Pattern.compile("( +)([a-z]+)"), "_$2"));
+        assertEquals("Lorem_ipsum_dolor_sit", RegExUtils.replaceAll("Lorem ipsum  dolor   sit", WHITESPACE_AND_LETTERS, "_$2"));
     }
 
     @Test
@@ -276,7 +278,7 @@ class RegExUtilsTest extends AbstractLangTest {
         assertEquals("ABC_bc123", RegExUtils.replaceFirst((CharSequence) "ABCabc123", Pattern.compile("[a-z]"), "_"));
         assertEquals("ABC_123abc", RegExUtils.replaceFirst((CharSequence) "ABCabc123abc", Pattern.compile("[^A-Z0-9]+"), "_"));
         assertEquals("ABC123abc", RegExUtils.replaceFirst((CharSequence) "ABCabc123abc", Pattern.compile("[^A-Z0-9]+"), ""));
-        assertEquals("Lorem_ipsum  dolor   sit", RegExUtils.replaceFirst((CharSequence) "Lorem ipsum  dolor   sit", Pattern.compile("( +)([a-z]+)"), "_$2"));
+        assertEquals("Lorem_ipsum  dolor   sit", RegExUtils.replaceFirst((CharSequence) "Lorem ipsum  dolor   sit", WHITESPACE_AND_LETTERS, "_$2"));
     }
 
     @Test
@@ -298,7 +300,7 @@ class RegExUtilsTest extends AbstractLangTest {
         assertEquals("ABC_123abc", RegExUtils.replaceFirst("ABCabc123abc", "[^A-Z0-9]+", "_"));
         assertEquals("ABC123abc", RegExUtils.replaceFirst("ABCabc123abc", "[^A-Z0-9]+", ""));
         assertEquals("Lorem_ipsum  dolor   sit",
-                RegExUtils.replaceFirst("Lorem ipsum  dolor   sit", "( +)([a-z]+)", "_$2"));
+                RegExUtils.replaceFirst("Lorem ipsum  dolor   sit", "( ++)([a-z]++)", "_$2"));
 
         assertThrows(PatternSyntaxException.class, () -> RegExUtils.replaceFirst("any", "{badRegexSyntax}", ""),
                 "RegExUtils.replaceFirst expecting PatternSyntaxException");
@@ -322,7 +324,7 @@ class RegExUtilsTest extends AbstractLangTest {
         assertEquals("ABC_bc123", RegExUtils.replaceFirst("ABCabc123", Pattern.compile("[a-z]"), "_"));
         assertEquals("ABC_123abc", RegExUtils.replaceFirst("ABCabc123abc", Pattern.compile("[^A-Z0-9]+"), "_"));
         assertEquals("ABC123abc", RegExUtils.replaceFirst("ABCabc123abc", Pattern.compile("[^A-Z0-9]+"), ""));
-        assertEquals("Lorem_ipsum  dolor   sit", RegExUtils.replaceFirst("Lorem ipsum  dolor   sit", Pattern.compile("( +)([a-z]+)"), "_$2"));
+        assertEquals("Lorem_ipsum  dolor   sit", RegExUtils.replaceFirst("Lorem ipsum  dolor   sit", WHITESPACE_AND_LETTERS, "_$2"));
     }
 
     @Test
@@ -342,7 +344,7 @@ class RegExUtilsTest extends AbstractLangTest {
         assertEquals("ABC___123", RegExUtils.replacePattern((CharSequence) "ABCabc123", "[a-z]", "_"));
         assertEquals("ABC_123", RegExUtils.replacePattern((CharSequence) "ABCabc123", "[^A-Z0-9]+", "_"));
         assertEquals("ABC123", RegExUtils.replacePattern((CharSequence) "ABCabc123", "[^A-Z0-9]+", ""));
-        assertEquals("Lorem_ipsum_dolor_sit", RegExUtils.replacePattern((CharSequence) "Lorem ipsum  dolor   sit", "( +)([a-z]+)", "_$2"));
+        assertEquals("Lorem_ipsum_dolor_sit", RegExUtils.replacePattern((CharSequence) "Lorem ipsum  dolor   sit", "( ++)([a-z]++)", "_$2"));
     }
 
     @Test
@@ -362,7 +364,7 @@ class RegExUtilsTest extends AbstractLangTest {
         assertEquals("ABC___123", RegExUtils.replacePattern("ABCabc123", "[a-z]", "_"));
         assertEquals("ABC_123", RegExUtils.replacePattern("ABCabc123", "[^A-Z0-9]+", "_"));
         assertEquals("ABC123", RegExUtils.replacePattern("ABCabc123", "[^A-Z0-9]+", ""));
-        assertEquals("Lorem_ipsum_dolor_sit", RegExUtils.replacePattern("Lorem ipsum  dolor   sit", "( +)([a-z]+)", "_$2"));
+        assertEquals("Lorem_ipsum_dolor_sit", RegExUtils.replacePattern("Lorem ipsum  dolor   sit", "( ++)([a-z]++)", "_$2"));
     }
 
 }
