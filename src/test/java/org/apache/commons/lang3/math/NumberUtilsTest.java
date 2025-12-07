@@ -34,7 +34,8 @@ import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.function.Function;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.apache.commons.lang3.AbstractLangTest;
 import org.junit.jupiter.api.Test;
 
@@ -42,7 +43,7 @@ import org.junit.jupiter.api.Test;
  * Tests {@link org.apache.commons.lang3.math.NumberUtils}.
  */
 class NumberUtilsTest extends AbstractLangTest {
-
+    private static final Logger LOG = LoggerFactory.getLogger(NumberUtilsTest.class);
     private static void assertCreateNumberZero(final String number, final Object zero, final Object negativeZero) {
         assertEquals(zero, NumberUtils.createNumber(number), () -> "Input: " + number);
         assertEquals(zero, NumberUtils.createNumber("+" + number), () -> "Input: +" + number);
@@ -107,7 +108,8 @@ class NumberUtilsTest extends AbstractLangTest {
             return true;
         } catch (final Exception e) {
             if (!s.matches(".*\\s.*")) {
-                e.printStackTrace();
+                // Replace e.printStackTrace() with a debug or trace level log
+                LOG.debug("Exception encountered during isApplyNonNull check for string: {}", s, e);
             }
             return false;
         }
