@@ -19,6 +19,7 @@ package org.apache.commons.lang3.builder;
 
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 import org.apache.commons.lang3.AbstractLangTest;
 import org.junit.jupiter.api.Disabled;
@@ -69,7 +70,7 @@ class ReflectionToStringBuilderMutateInspectConcurrencyTest extends AbstractLang
 
     final class TestFixture {
         private final LinkedList<Integer> listField = new LinkedList<>();
-        private final Random random = new Random();
+        private final Random random = ThreadLocalRandom.current();
         private final int N = 100;
 
         TestFixture() {
