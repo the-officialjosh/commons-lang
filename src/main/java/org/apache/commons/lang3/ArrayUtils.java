@@ -4730,12 +4730,19 @@ public class ArrayUtils {
 
     /**
      * Gets the {@link ThreadLocalRandom} for {@code shuffle} methods that don't take a {@link Random} argument.
+     * <p>
+     * This method is not used in a security-sensitive context. For security-critical use cases,
+     * callers should use the {@code shuffle(..., java.security.SecureRandom)} overloads instead.
+     * </p>
      *
      * @return the current ThreadLocalRandom.
      */
+    @SuppressWarnings("java:S2245") // ThreadLocalRandom is safe here: used only for non-security-sensitive shuffling.
     private static ThreadLocalRandom random() {
         return ThreadLocalRandom.current();
     }
+
+
 
     /**
      * Removes the element at the specified position from the specified array.
