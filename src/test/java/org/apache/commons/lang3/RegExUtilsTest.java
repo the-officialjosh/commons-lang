@@ -230,7 +230,7 @@ class RegExUtilsTest extends AbstractLangTest {
         assertEquals("ABC___123", RegExUtils.replaceAll("ABCabc123", "[a-z]", "_"));
         assertEquals("ABC_123", RegExUtils.replaceAll("ABCabc123", "[^A-Z0-9]+", "_"));
         assertEquals("ABC123", RegExUtils.replaceAll("ABCabc123", "[^A-Z0-9]+", ""));
-        assertEquals("Lorem_ipsum_dolor_sit", RegExUtils.replaceAll("Lorem ipsum  dolor   sit", "( ++)([a-z]++)", "_$2"));
+        assertEquals("Lorem_ipsum_dolor_sit", RegExUtils.replaceAll("Lorem ipsum  dolor   sit", "( +)([a-z]+)", "_$2"));
 
         assertThrows(PatternSyntaxException.class, () -> RegExUtils.replaceAll("any", "{badRegexSyntax}", ""),
                 "RegExUtils.replaceAll expecting PatternSyntaxException");
